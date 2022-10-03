@@ -104,7 +104,7 @@ if [ "$?" != "0" ]; then
 fi
 
 # Punch it.
-setpriv --reuid @(user) --regid @(user) --init-groups roslaunch $LAUNCH_FILENAME @(roslaunch_wait?'--wait ')&
+setpriv --reuid @(user) --regid @(user) --init-groups roslaunch $LAUNCH_FILENAME @(roslaunch_options) @(roslaunch_wait?'--wait ')&
 PID=$!
 
 @[if sigterm_stop]@

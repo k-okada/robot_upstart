@@ -38,6 +38,6 @@ echo "<launch>"
 echo "    <!-- Generated from launch files in $path -->"
 for file in $files
 do
-  echo "  <include file=\"$file\" />"
+  echo "  <include file=\"$file\" pass_all_args=\"true\" />"
 done
 echo "</launch>"

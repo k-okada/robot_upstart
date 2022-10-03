@@ -83,6 +83,10 @@ def main():
 
     args = get_argument_parser().parse_args()
 
+    # You can pass option to roslaucnh by 'pkg/file.path -- --screen foo:=bar'
+    # so split args.pkg_path to roslaunch_options
+    roslaunch_options = [opt for opt in args.pkgpath if opt.startswith('--') or ':=' in opt ]
+    args.pkgpath = [x for x in args.pkgpath if x not in roslaunch_options]
     pkg, pkgpath = args.pkgpath[0].split('/', 1)
     job_name = args.job or pkg.split('_', 1)[0]
 
@@ -120,6 +124,8 @@ def main():
         j.generate_system_files = False
     if args.wait:
         j.roslaunch_wait = True
+    if roslaunch_options:
+        j.roslaunch_options = ' '.join(roslaunch_options)
 
     provider = providers.detect_provider()
     if args.provider == 'upstart':

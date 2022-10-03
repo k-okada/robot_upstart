@@ -101,6 +101,10 @@ class Job(object):
         # connect to an existing master.
         self.roslaunch_wait = False
 
+        # Override this to string passed to roslaunch.
+        # This will be '--' style  options and ':=' style ROS argument remapping
+        self.roslaunch_options = ''
+
         # Set the string of the "After=" section
         # of the generated Systemd service file
         self.systemd_after = systemd_after or "network.target"
