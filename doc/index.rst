@@ -37,6 +37,11 @@ or you can bring it up and down manually (command may differ per providers (``up
     $ sudo systemctl start myrobot
     $ sudo systemctl stop myrobot
 
+    When supervisor in use
+    $ sudo supervisorctl stop myrobot
+    $ sudo supervisorctl start myrobot
+
+
 If the job is crashing on startup, or you otherwise want to see what is
 being output to the terminal on startup, check the upstart log:
 
@@ -48,6 +53,9 @@ being output to the terminal on startup, check the upstart log:
 
     systemd
     $ sudo journalctl -u myrobot
+
+    supervisor
+    $ sudo supervisorctl tail -f myrobot stdout
 
 For more details, please see :doc:`install` and :doc:`uninstall`.
 
@@ -69,6 +77,20 @@ Extending
 
 If you're interesting in adding support for other init schemes to
 robot_upstart, please see :doc:`providers`.
+
+
+Tips
+----
+
+supervisor
+==========
+
+You can create a ``roscore`` job along with ``talker_listener.launch``.
+
+.. code-block:: bash
+
+    $ rosrun robot_upstart install --provider supervisor --supervisor-priority 10 --roscore
+    $ rosrun robot_upstart install --provider supervisor --supervisor-priority 300 --wait --job talker_listener roscpp_tutorials/launch/talker_listener.launch
 
 
 Index
