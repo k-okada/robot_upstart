@@ -41,7 +41,7 @@ class Job(object):
 
     def __init__(self, name="ros", interface=None, user=None, workspace_setup=None,
                  rosdistro=None, master_uri=None, log_path=None, sigterm_stop=None,
-                 systemd_after=None, supervisor_priority=None):
+                 systemd_after=None, supervisor_priority=None, roscore=None):
         """Construct a new Job definition.
 
         :param name: Name of job to create. Defaults to "ros", but you might
@@ -95,6 +95,9 @@ class Job(object):
         # Override this to True if you want to create symbolic link for
         # job launch files instead of copying them.
         self.symlink = False
+
+        # Override this to True is you want start roscore ony
+        self.roscore = roscore
 
         # Override this to True is you want the --wait flag passed to roslaunch.
         # This will be desired if the nodes spawned by this job are intended to

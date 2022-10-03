@@ -42,7 +42,7 @@ def get_argument_parser():
         to access the Python API from their own setup scripts, but this exists as a simple helper, an example,
         and a compatibility shim for previous versions of robot_upstart which were bash-based.""")
 
-    p.add_argument("pkgpath", type=str, nargs='+', metavar="pkg/path",
+    p.add_argument("pkgpath", type=str, nargs='*', metavar="pkg/path",
                    help="Package and path to install job launch files from. " +
                         DESC_PKGPATH)
     p.add_argument("--job", type=str,
@@ -68,6 +68,8 @@ def get_argument_parser():
                    help="Create symbolic link to job launch files instead of copying them.")
     p.add_argument("--wait", action='store_true',
                    help="Pass a wait flag to roslaunch.")
+    p.add_argument("--roscore", action='store_true',
+                   help="Create roscore jobs.")
     p.add_argument("--systemd-after", type=str, metavar="After=",
                    help="Set the string of the After= section"
                         "of the generated Systemd service file")
@@ -87,8 +89,11 @@ def main():
     # so split args.pkg_path to roslaunch_options
     roslaunch_options = [opt for opt in args.pkgpath if opt.startswith('--') or ':=' in opt ]
     args.pkgpath = [x for x in args.pkgpath if x not in roslaunch_options]
-    pkg, pkgpath = args.pkgpath[0].split('/', 1)
-    job_name = args.job or pkg.split('_', 1)[0]
+    if not args.roscore:
+        pkg, pkgpath = args.pkgpath[0].split('/', 1)
+        job_name = args.job or pkg.split('_', 1)[0]
+    else:
+        job_name = "roscore"
 
     # Any unspecified arguments are on the args object as None. These are filled
     # in by the Job constructor when passed as Nones.
@@ -98,7 +103,8 @@ def main():
         master_uri=args.master, log_path=args.logdir,
         sigterm_stop=(args.provider=='supervisor'),
         systemd_after=args.systemd_after,
-        supervisor_priority=args.supervisor_priority)
+        supervisor_priority=args.supervisor_priority,
+        roscore=args.roscore)
 
     for this_pkgpath in args.pkgpath:
         pkg, pkgpath = this_pkgpath.split('/', 1)

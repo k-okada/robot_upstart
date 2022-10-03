@@ -72,6 +72,7 @@ export ROS_LOG_DIR=$log_path
 
 log info "@(name): Launching ROS_HOSTNAME=$ROS_HOSTNAME, ROS_IP=$ROS_IP, ROS_MASTER_URI=$ROS_MASTER_URI, ROS_HOME=$ROS_HOME, ROS_LOG_DIR=$log_path"
 
+@[if not roscore]@
 # If xacro files are present in job folder, generate and expand an amalgamated urdf.
 XACRO_FILENAME=$log_path/@(name).xacro
 XACRO_ROBOT_NAME=$(echo "@(name)" | cut -d- -f1)
@@ -95,6 +96,7 @@ if [[ "$?" != "0" ]]; then
   exit 1
 fi
 log info "@(name): Generated launchfile: $LAUNCH_FILENAME"
+@[end if]@
 
 # Warn and exit if setpriv is missing from the system.
 which setpriv > /dev/null
@@ -103,8 +105,12 @@ if [ "$?" != "0" ]; then
   exit 1
 fi
 
+@[if roscore]@
+setpriv --reuid @(user) --regid @(user) --init-groups roslaunch --core &
+@[else]
 # Punch it.
 setpriv --reuid @(user) --regid @(user) --init-groups roslaunch $LAUNCH_FILENAME @(roslaunch_options) @(roslaunch_wait?'--wait ')&
+@[end if]@
 PID=$!
 
 @[if sigterm_stop]@
