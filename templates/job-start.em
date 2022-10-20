@@ -33,6 +33,7 @@ function log() {
 }
 
 log info "@(name): Using workspace setup file @(workspace_setup)"
+source /opt/ros/@(rosdistro)/setup.bash
 source @(workspace_setup)
 JOB_FOLDER=@(job_path)
 
