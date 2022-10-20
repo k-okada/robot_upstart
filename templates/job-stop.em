@@ -28,7 +28,7 @@
 #!/bin/bash
 # THIS IS A GENERATED FILE, NOT RECOMMENDED TO EDIT.
 
-PID=$(cat @(log_path)/@(name).pid)
+PID=$(cat @(log_path)/log-supervisor-@(user)/@(name).pid)
 logger -p user.info "Attempting to stop @(name) (PID $PID)"
 kill $PID
 logger -s -p user.info "Waiting for roslaunch process to end"

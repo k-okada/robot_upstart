@@ -37,7 +37,7 @@ source /opt/ros/@(rosdistro)/setup.bash
 source @(workspace_setup)
 JOB_FOLDER=@(job_path)
 
-log_path="@(log_path)"
+log_path="@(log_path)/log-supervisor-@(user)"
 if [[ ! -d $log_path ]]; then
   CREATED_LOGDIR=true
   trap 'CREATED_LOGDIR=false' ERR
