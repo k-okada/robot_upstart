@@ -26,7 +26,7 @@
 @#
 # THIS IS A GENERATED FILE, NOT RECOMMENDED TO EDIT.
 
-[program:@(name)]
+[program:@(name)__@(user)__]
 command=/usr/sbin/@(name)-start
 stopsignal=TERM
 autostart=true
